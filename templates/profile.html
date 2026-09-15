@@ -46,7 +46,14 @@
 {% endfor %}
 
     <h2>Assessment</h2>
+
+{% for assessment in assessments %}
+    <p><strong>Skill:</strong> {{ assessment.skill.name }}</p>
+    <p><strong>Score:</strong> {{ assessment.score }}%</p>
+    <p><strong>Level:</strong> {{ assessment.level }}</p>
+{% empty %}
     <p>No assessments completed yet.</p>
+{% endfor %}
 
     <h2>Reviews & Ratings</h2>
     <p>No reviews yet.</p>

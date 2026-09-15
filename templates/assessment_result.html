@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assessment Result</title>
+</head>
+
+<body>
+
+    <h1>Python Assessment Result</h1>
+
+    <h2>Your Score: {{ score }}%</h2>
+
+    <h2>Level: {{ level }}</h2>
+
+    {% if level == "Advanced" %}
+        <p>Excellent! You have an advanced level of Python knowledge.</p>
+    {% elif level == "Intermediate" %}
+        <p>Good job! You have an intermediate level of Python knowledge.</p>
+    {% elif level == "Basic" %}
+        <p>You have a basic level of Python knowledge.</p>
+    {% else %}
+        <p>Your Python skill could not be verified yet.</p>
+    {% endif %}
+
+    <br>
+
+    <a href="/profile/">Go to My Profile</a>
+
+</body>
+</html>

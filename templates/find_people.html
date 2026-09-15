@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Find People</title>
+</head>
+
+<body>
+
+    <h1>Find People</h1>
+
+    <form method="get">
+        <input
+            type="text"
+            name="skill"
+            placeholder="Search for a skill..."
+            value="{{ skill_name }}"
+        >
+
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    {% if skill_name %}
+
+        <h2>People who can teach "{{ skill_name }}"</h2>
+
+        {% for person in people %}
+
+            <div>
+                <h3>{{ person.user.username }}</h3>
+
+                <p>
+                    <strong>Skills they can teach:</strong>
+                </p>
+
+                {% for skill in person.skills_to_teach.all %}
+                    <span>{{ skill.name }}</span><br>
+                {% endfor %}
+
+                <br>
+
+                <a href="/profile/">View Profile</a>
+            </div>
+
+            <hr>
+
+        {% empty %}
+
+            <p>No people found for this skill.</p>
+
+        {% endfor %}
+
+    {% endif %}
+
+</body>
+</html>
