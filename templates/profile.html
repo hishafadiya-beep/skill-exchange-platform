@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile - Skill Exchange Platform</title>
+</head>
+
+<body>
+
+    <h1>My Profile</h1>
+
+    <h2>Basic Information</h2>
+
+    <p><strong>Username:</strong> {{ user.username }}</p>
+
+    <h2>Skills I Can Teach</h2>
+
+    <form method="post">
+    {% csrf_token %}
+
+    <label>Select a skill:</label>
+
+    <select name="skill">
+        {% for skill in skills %}
+            <option value="{{ skill.id }}">{{ skill.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" name="teach">Add to Teaching Skills</button>
+    <button type="submit" name="learn">Add to Learning Skills</button>
+</form>
+
+    <h3>My Teaching Skills</h3>
+
+    {% for skill in profile.skills_to_teach.all %}
+        <p>{{ skill.name }}</p>
+    {% empty %}
+        <p>No teaching skills added yet.</p>
+    {% endfor %}
+
+    <h2>Skills I Want to Learn</h2>
+
+{% for skill in profile.skills_to_learn.all %}
+    <p>{{ skill.name }}</p>
+{% empty %}
+    <p>No learning skills added yet.</p>
+{% endfor %}
+
+    <h2>Assessment</h2>
+    <p>No assessments completed yet.</p>
+
+    <h2>Reviews & Ratings</h2>
+    <p>No reviews yet.</p>
+
+</body>
+</html>

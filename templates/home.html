@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skill Exchange Platform</title>
+</head>
+
+<body>
+
+    {% if user.is_authenticated %}
+
+        <h1>Welcome, {{ user.username }}!</h1>
+
+        <p>You are logged in to the Skill Exchange Platform.</p>
+
+        <button>Dashboard</button>
+        <button onclick="window.location.href='/logout/'">Logout</button>
+
+    {% else %}
+
+        <h1>Welcome to Skill Exchange Platform</h1>
+
+        <p>Learn by teaching. Teach by learning.</p>
+
+        <button onclick="window.location.href='/login/'">Login</button>
+        <button onclick="window.location.href='/register/'">Register</button>
+
+    {% endif %}
+
+</body>
+</html>
