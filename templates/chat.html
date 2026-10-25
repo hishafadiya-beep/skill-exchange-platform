@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chat with {{ other_user.username }} - Skill Exchange</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+        }
+
+
+        /* =========================
+           Navigation
+        ========================= */
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: #fffdf8;
+            border-bottom: 1px solid #e5e0d5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #496b58;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4d5d54;
+            font-size: 15px;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #496b58;
+        }
+
+        .logout-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: #496b58;
+            color: white !important;
+        }
+
+
+        /* =========================
+           Chat Container
+        ========================= */
+
+        .chat-container {
+            width: 90%;
+            max-width: 900px;
+
+            margin: 45px auto 70px;
+        }
+
+        .chat-card {
+            background: #fffdf8;
+
+            border-radius: 28px;
+
+            box-shadow:
+                0 15px 40px rgba(45, 61, 51, 0.08);
+
+            overflow: hidden;
+        }
+
+
+        /* =========================
+           Chat Header
+        ========================= */
+
+        .chat-header {
+            padding: 24px 30px;
+
+            background: #496b58;
+            color: white;
+
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 54px;
+            height: 54px;
+
+            min-width: 54px;
+
+            border-radius: 50%;
+
+            background: #dce7da;
+            color: #496b58;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            border: 4px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .chat-header h1 {
+            font-size: 21px;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+
+        /* =========================
+           Messages Area
+        ========================= */
+
+        .messages {
+            min-height: 420px;
+            max-height: 520px;
+
+            overflow-y: auto;
+
+            padding: 30px;
+
+            background: #faf9f4;
+        }
+
+        .messages::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .messages::-webkit-scrollbar-track {
+            background: #f1f0e9;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: #cbd5ca;
+            border-radius: 20px;
+        }
+
+        .message-row {
+            display: flex;
+
+            margin-bottom: 20px;
+        }
+
+        .message-row.mine {
+            justify-content: flex-end;
+        }
+
+        .message-row.other {
+            justify-content: flex-start;
+        }
+
+
+        /* =========================
+           Message Bubble
+        ========================= */
+
+        .message-bubble {
+            max-width: 65%;
+
+            padding: 13px 17px;
+
+            border-radius: 18px;
+
+            line-height: 1.5;
+
+            font-size: 14px;
+
+            word-wrap: break-word;
+        }
+
+        .mine .message-bubble {
+            background: #496b58;
+            color: white;
+
+            border-bottom-right-radius: 5px;
+        }
+
+        .other .message-bubble {
+            background: #e3eadf;
+            color: #26382f;
+
+            border-bottom-left-radius: 5px;
+        }
+
+
+        /* =========================
+           Sender
+        ========================= */
+
+        .sender-name {
+            font-size: 11px;
+
+            font-weight: bold;
+
+            margin-bottom: 5px;
+
+            opacity: 0.75;
+        }
+
+
+        /* =========================
+           Message Time
+        ========================= */
+
+        .message-time {
+            display: block;
+
+            font-size: 10px;
+
+            margin-top: 7px;
+
+            opacity: 0.65;
+        }
+
+
+        /* =========================
+           Empty Chat
+        ========================= */
+
+        .empty-chat {
+            min-height: 420px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            color: #7b857e;
+
+            padding: 30px;
+        }
+
+        .empty-chat-icon {
+            width: 64px;
+            height: 64px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 50%;
+
+            background: #e3eadf;
+            color: #496b58;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 27px;
+        }
+
+        .empty-chat h3 {
+            margin-bottom: 8px;
+
+            color: #496b58;
+
+            font-size: 20px;
+        }
+
+        .empty-chat p {
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           Message Form
+        ========================= */
+
+        .message-form {
+            padding: 20px 25px;
+
+            background: #fffdf8;
+
+            border-top: 1px solid #e5e0d5;
+
+            display: flex;
+
+            gap: 12px;
+        }
+
+        .message-input {
+            flex: 1;
+
+            padding: 14px 18px;
+
+            border: 1px solid #d9dfd8;
+
+            border-radius: 30px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            background: white;
+
+            color: #26382f;
+
+            transition: 0.2s ease;
+        }
+
+        .message-input::placeholder {
+            color: #9aa29d;
+        }
+
+        .message-input:focus {
+            border-color: #496b58;
+
+            box-shadow:
+                0 0 0 3px rgba(73, 107, 88, 0.08);
+        }
+
+        .send-btn {
+            border: none;
+
+            padding: 13px 25px;
+
+            border-radius: 30px;
+
+            background: #496b58;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            transition: 0.2s ease;
+        }
+
+        .send-btn:hover {
+            background: #3e5c4b;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================
+           Mobile
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .chat-container {
+                width: 94%;
+
+                margin-top: 30px;
+            }
+
+            .chat-header {
+                padding: 20px;
+            }
+
+            .messages {
+                padding: 20px;
+
+                min-height: 400px;
+            }
+
+            .message-bubble {
+                max-width: 80%;
+            }
+
+            .message-form {
+                padding: 15px;
+            }
+
+            .send-btn {
+                padding: 13px 18px;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .chat-container {
+                width: 96%;
+            }
+
+            .chat-card {
+                border-radius: 20px;
+            }
+
+            .chat-header h1 {
+                font-size: 18px;
+            }
+
+            .message-form {
+                gap: 8px;
+            }
+
+            .message-input {
+                min-width: 0;
+
+                padding: 13px 15px;
+            }
+
+            .send-btn {
+                padding: 13px 17px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         Navigation
+    ========================= -->
+
+    <nav class="navbar">
+
+        <a href="{% url 'dashboard' %}" class="logo">
+            Skill Exchange
+        </a>
+
+        <div class="nav-links">
+
+            <a href="{% url 'dashboard' %}">
+                Home
+            </a>
+
+            <a href="{% url 'find_people' %}">
+                Find People
+            </a>
+
+            <a href="{% url 'profile' %}">
+                My Profile
+            </a>
+
+            <a href="{% url 'exchange_requests' %}">
+                Requests
+            </a>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         Chat
+    ========================= -->
+
+    <main class="chat-container">
+
+        <div class="chat-card">
+
+
+            <!-- Chat Header -->
+
+            <div class="chat-header">
+
+                <div class="avatar">
+                    {{ other_user.username|first|upper }}
+                </div>
+
+                <div>
+
+                    <h1>
+                        {{ other_user.username }}
+                    </h1>
+
+                    <p>
+                        Skill Exchange Partner
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Messages
+            ========================= -->
+
+            {% if messages %}
+
+                <div class="messages">
+
+                    {% for message in messages %}
+
+                        <div
+                            class="message-row {% if message.sender == request.user %}mine{% else %}other{% endif %}"
+                        >
+
+                            <div class="message-bubble">
+
+                                <div class="sender-name">
+
+                                    {% if message.sender == request.user %}
+
+                                        You
+
+                                    {% else %}
+
+                                        {{ message.sender.username }}
+
+                                    {% endif %}
+
+                                </div>
+
+                                {{ message.message }}
+
+                                <small class="message-time">
+                                    {{ message.created_at }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-chat">
+
+                    <div>
+
+                        <div class="empty-chat-icon">
+                            💬
+                        </div>
+
+                        <h3>
+                            Start your skill exchange!
+                        </h3>
+
+                        <p>
+                            Send a message and start learning together.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 Message Form
+            ========================= -->
+
+            <form method="post" class="message-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="text"
+                    name="message"
+                    class="message-input"
+                    placeholder="Type your message..."
+                    required
+                    autocomplete="off"
+                >
+
+                <button
+                    type="submit"
+                    class="send-btn"
+                >
+                    Send
+                </button>
+
+            </form>
+
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

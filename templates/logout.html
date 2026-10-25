@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Logged Out - Skill Exchange</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffdf8;
+            border-bottom: 1px solid #e5e0d5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #496b58;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #496b58;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Main */
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 100px auto;
+        }
+
+        /* Logout Card */
+
+        .logout-card {
+            background: #fffdf8;
+            padding: 55px 45px;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(45, 61, 51, 0.08);
+            text-align: center;
+        }
+
+        .logout-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: #e3eadf;
+            color: #496b58;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+        }
+
+        .logout-card h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .logout-card p {
+            color: #748078;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        /* Buttons */
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            display: inline-block;
+            padding: 13px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s ease;
+        }
+
+        .primary-btn {
+            background: #496b58;
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #e3eadf;
+            color: #496b58;
+        }
+
+        .primary-btn:hover,
+        .secondary-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 92%;
+                margin-top: 60px;
+            }
+
+            .logout-card {
+                padding: 40px 25px;
+            }
+
+            .logout-card h1 {
+                font-size: 28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- Navigation -->
+
+    <nav class="navbar">
+
+        <a href="{% url 'login' %}" class="logo">
+            Skill Exchange
+        </a>
+
+        <a href="{% url 'register' %}" class="nav-link">
+            Create Account
+        </a>
+
+    </nav>
+
+
+    <!-- Logout Message -->
+
+    <main class="container">
+
+        <div class="logout-card">
+
+            <div class="logout-icon">
+                👋
+            </div>
+
+            <h1>
+                You've Been Logged Out
+            </h1>
+
+            <p>
+                Thanks for spending time on Skill Exchange.
+                We hope to see you back soon!
+            </p>
+
+            <div class="buttons">
+
+                <a
+                    href="{% url 'login' %}"
+                    class="primary-btn"
+                >
+                    Log In Again
+                </a>
+
+                <a
+                    href="{% url 'register' %}"
+                    class="secondary-btn"
+                >
+                    Create Account
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

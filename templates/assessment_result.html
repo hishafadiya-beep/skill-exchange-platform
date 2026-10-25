@@ -1,30 +1,367 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Assessment Result</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Assessment Result - Skill Exchange</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffdf8;
+            border-bottom: 1px solid #e5e0d5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #496b58;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4d5d54;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #496b58;
+        }
+
+        .logout-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: #496b58;
+            color: white !important;
+        }
+
+        /* Main */
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 70px auto;
+        }
+
+        .result-card {
+            background: #fffdf8;
+            padding: 55px 45px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(45, 61, 51, 0.09);
+        }
+
+        /* Badge */
+
+        .success-badge {
+            display: inline-block;
+            padding: 9px 17px;
+            background: #e3eadf;
+            color: #496b58;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 22px;
+        }
+
+        .result-card h1 {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #7b857e;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* Score */
+
+        .score-circle {
+            width: 170px;
+            height: 170px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            background: #e5eee2;
+            border: 10px solid #dce7da;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-circle strong {
+            font-size: 42px;
+            color: #496b58;
+        }
+
+        .score-circle span {
+            color: #7b857e;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        /* Level */
+
+        .level-box {
+            background: #f1f4ed;
+            padding: 22px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+
+        .level-label {
+            display: block;
+            color: #89928c;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .level {
+            font-size: 25px;
+            font-weight: bold;
+            color: #496b58;
+        }
+
+        /* Message */
+
+        .result-message {
+            color: #68756d;
+            line-height: 1.7;
+            margin-bottom: 35px;
+        }
+
+        /* Button */
+
+        .profile-btn {
+            display: inline-block;
+            padding: 14px 27px;
+            border-radius: 30px;
+            background: #496b58;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .profile-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .secondary-link {
+            display: block;
+            margin-top: 18px;
+            color: #748078;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .secondary-link:hover {
+            color: #496b58;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 850px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                width: 92%;
+                margin: 45px auto;
+            }
+
+            .result-card {
+                padding: 40px 25px;
+            }
+
+            .result-card h1 {
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-    <h1>Python Assessment Result</h1>
 
-    <h2>Your Score: {{ score }}%</h2>
+    <!-- Navigation -->
 
-    <h2>Level: {{ level }}</h2>
+    <nav class="navbar">
 
-    {% if level == "Advanced" %}
-        <p>Excellent! You have an advanced level of Python knowledge.</p>
-    {% elif level == "Intermediate" %}
-        <p>Good job! You have an intermediate level of Python knowledge.</p>
-    {% elif level == "Basic" %}
-        <p>You have a basic level of Python knowledge.</p>
-    {% else %}
-        <p>Your Python skill could not be verified yet.</p>
-    {% endif %}
+        <a href="{% url 'dashboard' %}" class="logo">
+            Skill Exchange
+        </a>
 
-    <br>
+        <div class="nav-links">
 
-    <a href="/profile/">Go to My Profile</a>
+            <a href="{% url 'dashboard' %}">
+                Home
+            </a>
+
+            <a href="{% url 'find_people' %}">
+                Find People
+            </a>
+
+            <a href="{% url 'profile' %}">
+                My Profile
+            </a>
+
+            <a href="{% url 'exchange_requests' %}">
+                Requests
+            </a>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="result-card">
+
+
+            <span class="success-badge">
+                ASSESSMENT COMPLETED
+            </span>
+
+
+            <h1>
+                Python Assessment Result
+            </h1>
+
+
+            <p class="subtitle">
+                Your skill verification assessment has been completed.
+            </p>
+
+
+            <!-- Score -->
+
+            <div class="score-circle">
+
+                <strong>
+                    {{ score }}%
+                </strong>
+
+                <span>
+                    SCORE
+                </span>
+
+            </div>
+
+
+            <!-- Level -->
+
+            <div class="level-box">
+
+                <span class="level-label">
+                    VERIFIED SKILL LEVEL
+                </span>
+
+                <div class="level">
+                    {{ level }}
+                </div>
+
+            </div>
+
+
+            <!-- Result message -->
+
+            <div class="result-message">
+
+                {% if level == "Advanced" %}
+
+                    <p>
+                        Excellent! You have an advanced level
+                        of Python knowledge.
+                    </p>
+
+                {% elif level == "Intermediate" %}
+
+                    <p>
+                        Good job! You have an intermediate level
+                        of Python knowledge.
+                    </p>
+
+                {% elif level == "Basic" %}
+
+                    <p>
+                        You have a basic level of Python knowledge.
+                    </p>
+
+                {% else %}
+
+                    <p>
+                        Your Python skill could not be verified yet.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <a
+                href="{% url 'profile' %}"
+                class="profile-btn"
+            >
+                Go to My Profile
+            </a>
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="secondary-link"
+            >
+                Return to Dashboard
+            </a>
+
+
+        </div>
+
+    </main>
 
 </body>
+
 </html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Exchange Requests - Skill Exchange</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffdf8;
+            border-bottom: 1px solid #e5e0d5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #496b58;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4d5d54;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #496b58;
+        }
+
+        .logout-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: #496b58;
+            color: white !important;
+        }
+
+        /* Main */
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: 55px auto 80px;
+        }
+
+        .page-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            color: #748078;
+            line-height: 1.7;
+        }
+
+        /* Sections */
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            margin-bottom: 22px;
+        }
+
+        .section-header h2 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .section-header p {
+            color: #7b857e;
+            font-size: 14px;
+        }
+
+        /* Request grid */
+
+        .request-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .request-card {
+            background: #fffdf8;
+            padding: 28px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(45, 61, 51, 0.07);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .request-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(45, 61, 51, 0.10);
+        }
+
+        /* User */
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #dce7da;
+            color: #496b58;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .user-header h3 {
+            font-size: 21px;
+        }
+
+        .user-header p {
+            color: #8a938d;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* Skill */
+
+        .skill-box {
+            background: #f1f4ed;
+            padding: 15px 17px;
+            border-radius: 15px;
+            margin-bottom: 18px;
+        }
+
+        .skill-box span {
+            display: block;
+            font-size: 12px;
+            color: #89928c;
+            margin-bottom: 5px;
+        }
+
+        .skill-box strong {
+            color: #496b58;
+        }
+
+        /* Status */
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .status-label {
+            color: #7b857e;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #eee9df;
+            color: #806d4f;
+        }
+
+        .status-accepted {
+            background: #dce9d9;
+            color: #496b58;
+        }
+
+        .status-rejected {
+            background: #eee4df;
+            color: #8a5f52;
+        }
+
+        /* Buttons */
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .accept-btn,
+        .reject-btn,
+        .chat-btn {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .accept-btn {
+            background: #496b58;
+            color: white;
+        }
+
+        .reject-btn {
+            background: #eee9df;
+            color: #6b6257;
+        }
+
+        .chat-btn {
+            background: #e3eadf;
+            color: #496b58;
+        }
+
+        .accept-btn:hover,
+        .reject-btn:hover,
+        .chat-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Empty */
+
+        .empty-card {
+            background: #fffdf8;
+            padding: 40px;
+            text-align: center;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(45, 61, 51, 0.06);
+        }
+
+        .empty-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .empty-card p {
+            color: #8a938d;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 850px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .request-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 34px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- Navigation -->
+
+    <nav class="navbar">
+
+        <a href="{% url 'dashboard' %}" class="logo">
+            Skill Exchange
+        </a>
+
+        <div class="nav-links">
+
+            <a href="{% url 'dashboard' %}">
+                Home
+            </a>
+
+            <a href="{% url 'find_people' %}">
+                Find People
+            </a>
+
+            <a href="{% url 'profile' %}">
+                My Profile
+            </a>
+
+            <a href="{% url 'exchange_requests' %}">
+                Requests
+            </a>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+
+        <!-- Header -->
+
+        <div class="page-header">
+
+            <h1>
+                Exchange Requests
+            </h1>
+
+            <p>
+                Manage your skill exchange connections and
+                continue learning with your peers.
+            </p>
+
+        </div>
+
+
+        <!-- RECEIVED REQUESTS -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Received Requests
+                </h2>
+
+                <p>
+                    People who want to exchange skills with you.
+                </p>
+
+            </div>
+
+
+            <div class="request-grid">
+
+                {% for exchange_request in received_requests %}
+
+                    <div class="request-card">
+
+
+                        <div class="user-header">
+
+                            <div class="avatar">
+                                {{ exchange_request.sender.username|first|upper }}
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    {{ exchange_request.sender.username }}
+                                </h3>
+
+                                <p>
+                                    Wants to learn with you
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="skill-box">
+
+                            <span>
+                                SKILL EXCHANGE
+                            </span>
+
+                            <strong>
+                                {{ exchange_request.skill.name }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="status-row">
+
+                            <span class="status-label">
+                                Request Status
+                            </span>
+
+                            {% if exchange_request.status == "Pending" %}
+
+                                <span class="status status-pending">
+                                    Pending
+                                </span>
+
+                            {% elif exchange_request.status == "Accepted" %}
+
+                                <span class="status status-accepted">
+                                    Accepted
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-rejected">
+                                    Rejected
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if exchange_request.status == "Pending" %}
+
+                            <div class="actions">
+
+                                <form method="post">
+
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="request_id"
+                                        value="{{ exchange_request.id }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        name="action"
+                                        value="accept"
+                                        class="accept-btn"
+                                    >
+                                        Accept Request
+                                    </button>
+
+                                </form>
+
+
+                                <form method="post">
+
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="request_id"
+                                        value="{{ exchange_request.id }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        name="action"
+                                        value="reject"
+                                        class="reject-btn"
+                                    >
+                                        Reject
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if exchange_request.status == "Accepted" %}
+
+                            <div class="actions">
+
+                                <a
+                                    href="{% url 'chat' exchange_request.sender.id %}"
+                                    class="chat-btn"
+                                >
+                                    Chat with {{ exchange_request.sender.username }}
+                                </a>
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                {% empty %}
+
+                    <div class="empty-card">
+
+                        <h3>
+                            No received requests
+                        </h3>
+
+                        <p>
+                            New skill exchange requests will appear here.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+        <!-- SENT REQUESTS -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Sent Requests
+                </h2>
+
+                <p>
+                    Track the skill exchange requests you've sent.
+                </p>
+
+            </div>
+
+
+            <div class="request-grid">
+
+                {% for exchange_request in sent_requests %}
+
+                    <div class="request-card">
+
+
+                        <div class="user-header">
+
+                            <div class="avatar">
+                                {{ exchange_request.receiver.username|first|upper }}
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    {{ exchange_request.receiver.username }}
+                                </h3>
+
+                                <p>
+                                    Your exchange request
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="skill-box">
+
+                            <span>
+                                SKILL REQUESTED
+                            </span>
+
+                            <strong>
+                                {{ exchange_request.skill.name }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="status-row">
+
+                            <span class="status-label">
+                                Request Status
+                            </span>
+
+                            {% if exchange_request.status == "Pending" %}
+
+                                <span class="status status-pending">
+                                    Pending
+                                </span>
+
+                            {% elif exchange_request.status == "Accepted" %}
+
+                                <span class="status status-accepted">
+                                    Accepted
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-rejected">
+                                    Rejected
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if exchange_request.status == "Accepted" %}
+
+                            <div class="actions">
+
+                                <a
+                                    href="{% url 'chat' exchange_request.receiver.id %}"
+                                    class="chat-btn"
+                                >
+                                    Chat with {{ exchange_request.receiver.username }}
+                                </a>
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                {% empty %}
+
+                    <div class="empty-card">
+
+                        <h3>
+                            No sent requests
+                        </h3>
+
+                        <p>
+                            Requests you send to other learners will appear here.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</body>
+
+</html>

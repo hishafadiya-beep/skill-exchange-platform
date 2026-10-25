@@ -1,62 +1,1221 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>My Profile - Skill Exchange Platform</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ profile.user.username }} - Skill Exchange</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+        }
+
+
+        /* =========================
+           Navigation
+        ========================= */
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: #fffdf8;
+            border-bottom: 1px solid #e5e0d5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #496b58;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4d5d54;
+            font-size: 15px;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #496b58;
+        }
+
+        .logout-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: #496b58;
+            color: white !important;
+        }
+
+
+        /* =========================
+           Main Container
+        ========================= */
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: 50px auto 80px;
+        }
+
+
+        /* =========================
+           Profile Header
+        ========================= */
+
+        .profile-header {
+            background: #fffdf8;
+            padding: 42px;
+            border-radius: 30px;
+
+            box-shadow: 0 15px 40px rgba(45, 61, 51, 0.08);
+
+            display: flex;
+            align-items: center;
+            gap: 28px;
+
+            margin-bottom: 30px;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::after {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            background: #e3eadf;
+
+            border-radius: 50%;
+
+            right: -70px;
+            top: -70px;
+
+            opacity: 0.6;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            min-width: 100px;
+
+            border-radius: 50%;
+
+            background: #dce7da;
+            color: #496b58;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 38px;
+            font-weight: bold;
+
+            border: 6px solid #f1f4ed;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-info {
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-header h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .profile-header p {
+            color: #748078;
+            font-size: 15px;
+        }
+
+        .member-badge {
+            display: inline-block;
+
+            margin-top: 12px;
+            padding: 7px 13px;
+
+            background: #e3eadf;
+            color: #496b58;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           General Cards
+        ========================= */
+
+        .card {
+            background: #fffdf8;
+
+            padding: 32px;
+
+            border-radius: 25px;
+
+            box-shadow: 0 10px 30px rgba(45, 61, 51, 0.07);
+
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            color: #748078;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           Manage Skills
+        ========================= */
+
+        .skill-form {
+            display: flex;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            align-items: center;
+        }
+
+        select {
+            padding: 14px 18px;
+
+            border: 1px solid #d9dfd8;
+
+            border-radius: 12px;
+
+            background: white;
+
+            color: #26382f;
+
+            font-size: 15px;
+
+            min-width: 220px;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #496b58;
+        }
+
+        button {
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        .primary-btn {
+            padding: 13px 20px;
+
+            border-radius: 25px;
+
+            background: #496b58;
+
+            color: white;
+
+            transition: 0.2s ease;
+        }
+
+        .secondary-btn {
+            padding: 13px 20px;
+
+            border-radius: 25px;
+
+            background: #e3eadf;
+
+            color: #496b58;
+
+            transition: 0.2s ease;
+        }
+
+        .primary-btn:hover,
+        .secondary-btn:hover {
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================
+           Skills
+        ========================= */
+
+        .skill-columns {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 25px;
+        }
+
+        .skill-section {
+            background: #f1f4ed;
+
+            padding: 25px;
+
+            border-radius: 20px;
+        }
+
+        .skill-section h3 {
+            margin-bottom: 20px;
+
+            color: #496b58;
+
+            font-size: 18px;
+        }
+
+        .skill-label {
+            font-size: 13px;
+
+            color: #7b857f;
+
+            margin-bottom: 15px;
+        }
+
+        .skill-item {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+
+            background: #fffdf8;
+
+            padding: 14px 16px;
+
+            border-radius: 13px;
+
+            margin-bottom: 10px;
+
+            box-shadow: 0 4px 12px rgba(45, 61, 51, 0.04);
+        }
+
+        .skill-name {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-weight: 600;
+        }
+
+        .skill-dot {
+            width: 8px;
+            height: 8px;
+
+            background: #496b58;
+
+            border-radius: 50%;
+        }
+
+
+        /* =========================
+           Assessment Link
+        ========================= */
+
+        .assessment-link {
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            background: #e3eadf;
+
+            color: #496b58;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.2s ease;
+        }
+
+        .assessment-link:hover {
+            background: #d5e1d2;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================
+           Remove Button
+        ========================= */
+
+        .remove-btn {
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            background: #eee9df;
+
+            color: #6b6257;
+
+            transition: 0.2s ease;
+        }
+
+        .remove-btn:hover {
+            background: #e4ded2;
+        }
+
+
+        /* =========================
+           Assessment
+        ========================= */
+
+        .assessment-intro {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .verified-badge {
+            padding: 7px 13px;
+
+            background: #e3eadf;
+
+            color: #496b58;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+        .assessment-grid {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 15px;
+        }
+
+        .assessment-box {
+            background: #f1f4ed;
+
+            padding: 24px;
+
+            border-radius: 18px;
+        }
+
+        .assessment-box span {
+            display: block;
+
+            color: #748078;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+        .assessment-box strong {
+            font-size: 23px;
+
+            color: #496b58;
+        }
+
+
+        /* =========================
+           Review Invitation
+        ========================= */
+
+        .review-invite {
+            background: #f1f4ed;
+
+            border-radius: 20px;
+
+            padding: 25px;
+        }
+
+        .review-invite h3 {
+            margin-bottom: 8px;
+        }
+
+        .review-invite p {
+            color: #748078;
+
+            line-height: 1.6;
+
+            margin-bottom: 18px;
+        }
+
+        .review-link {
+            display: inline-block;
+
+            padding: 12px 20px;
+
+            border-radius: 25px;
+
+            background: #496b58;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            transition: 0.2s ease;
+        }
+
+        .review-link:hover {
+            background: #26382f;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================
+           Reviews
+        ========================= */
+
+        .review-card {
+            background: #f1f4ed;
+
+            padding: 22px;
+
+            border-radius: 18px;
+
+            margin-bottom: 15px;
+        }
+
+        .review-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 12px;
+        }
+
+        .reviewer {
+            font-weight: bold;
+
+            color: #26382f;
+        }
+
+        .rating {
+            color: #8a7048;
+
+            font-weight: 600;
+        }
+
+        .review-comment {
+            color: #68756d;
+
+            line-height: 1.6;
+
+            margin-bottom: 10px;
+        }
+
+        .review-date {
+            font-size: 12px;
+
+            color: #929b95;
+        }
+
+
+        /* =========================
+           Empty State
+        ========================= */
+
+        .empty {
+            color: #8a938d;
+
+            font-size: 14px;
+
+            padding: 10px 0;
+        }
+
+
+        /* =========================
+           Responsive
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .profile-header {
+                padding: 30px;
+            }
+
+            .profile-header h1 {
+                font-size: 28px;
+            }
+
+            .skill-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .assessment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skill-form {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            select {
+                width: 100%;
+
+                min-width: 0;
+            }
+
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .profile-header {
+                flex-direction: column;
+
+                text-align: center;
+            }
+
+            .profile-avatar {
+                width: 85px;
+
+                height: 85px;
+
+                min-width: 85px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .skill-item {
+                gap: 10px;
+            }
+
+            .review-top {
+                align-items: flex-start;
+
+                gap: 10px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <h1>My Profile</h1>
 
-    <h2>Basic Information</h2>
+    <!-- =========================
+         Navigation
+    ========================= -->
 
-    <p><strong>Username:</strong> {{ user.username }}</p>
+    <nav class="navbar">
 
-    <h2>Skills I Can Teach</h2>
+        <a
+            href="{% url 'dashboard' %}"
+            class="logo"
+        >
+            Skill Exchange
+        </a>
 
-    <form method="post">
-    {% csrf_token %}
 
-    <label>Select a skill:</label>
+        <div class="nav-links">
 
-    <select name="skill">
-        {% for skill in skills %}
-            <option value="{{ skill.id }}">{{ skill.name }}</option>
-        {% endfor %}
-    </select>
+            <a href="{% url 'dashboard' %}">
+                Home
+            </a>
 
-    <button type="submit" name="teach">Add to Teaching Skills</button>
-    <button type="submit" name="learn">Add to Learning Skills</button>
-</form>
+            <a href="{% url 'find_people' %}">
+                Find People
+            </a>
 
-    <h3>My Teaching Skills</h3>
+            <a href="{% url 'profile' %}">
+                My Profile
+            </a>
 
-    {% for skill in profile.skills_to_teach.all %}
-        <p>{{ skill.name }}</p>
-    {% empty %}
-        <p>No teaching skills added yet.</p>
-    {% endfor %}
+            <a href="{% url 'exchange_requests' %}">
+                Requests
+            </a>
 
-    <h2>Skills I Want to Learn</h2>
+            <a
+                href="{% url 'logout' %}"
+                class="logout-btn"
+            >
+                Logout
+            </a>
 
-{% for skill in profile.skills_to_learn.all %}
-    <p>{{ skill.name }}</p>
-{% empty %}
-    <p>No learning skills added yet.</p>
-{% endfor %}
+        </div>
 
-    <h2>Assessment</h2>
+    </nav>
 
-{% for assessment in assessments %}
-    <p><strong>Skill:</strong> {{ assessment.skill.name }}</p>
-    <p><strong>Score:</strong> {{ assessment.score }}%</p>
-    <p><strong>Level:</strong> {{ assessment.level }}</p>
-{% empty %}
-    <p>No assessments completed yet.</p>
-{% endfor %}
 
-    <h2>Reviews & Ratings</h2>
-    <p>No reviews yet.</p>
+    <!-- =========================
+         Main Profile
+    ========================= -->
+
+    <main class="container">
+
+
+        <!-- =========================
+             Profile Header
+        ========================= -->
+
+        <section class="profile-header">
+
+            <div class="profile-avatar">
+
+                {{ profile.user.username|first|upper }}
+
+            </div>
+
+
+            <div class="profile-info">
+
+                <h1>
+                    {{ profile.user.username }}
+                </h1>
+
+                <p>
+                    Skill Exchange Member
+                </p>
+
+                <span class="member-badge">
+                    ✦ Peer Learning Community
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             Manage Skills
+        ========================= -->
+
+        {% if is_own_profile %}
+
+            <section class="card">
+
+                <h2>
+                    Manage Your Skills
+                </h2>
+
+                <p class="card-description">
+                    Add skills you can teach or skills you want to learn.
+                </p>
+
+
+                <form
+                    method="post"
+                    class="skill-form"
+                >
+
+                    {% csrf_token %}
+
+
+                    <select name="skill">
+
+                        {% for skill in skills %}
+
+                            <option value="{{ skill.id }}">
+                                {{ skill.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="teach"
+                        class="primary-btn"
+                    >
+                        + Add Teaching Skill
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="learn"
+                        class="secondary-btn"
+                    >
+                        + Add Learning Skill
+                    </button>
+
+                </form>
+
+            </section>
+
+        {% endif %}
+
+
+        <!-- =========================
+             Skills
+        ========================= -->
+
+        <section class="card">
+
+
+            {% if is_own_profile %}
+
+                <h2>
+                    Your Skills
+                </h2>
+
+                <p class="card-description">
+                    Skills you can share and skills you would like to learn.
+                </p>
+
+            {% else %}
+
+                <h2>
+                    {{ profile.user.username }}'s Skills
+                </h2>
+
+                <p class="card-description">
+                    Explore the skills this member can teach and wants to learn.
+                </p>
+
+            {% endif %}
+
+
+            <div class="skill-columns">
+
+
+                <!-- =========================
+                     Teaching Skills
+                ========================= -->
+
+                <div class="skill-section">
+
+                    <h3>
+                        Skills I Teach
+                    </h3>
+
+                    <p class="skill-label">
+                        Knowledge this user can share with others
+                    </p>
+
+
+                    {% for skill in profile.skills_to_teach.all %}
+
+                        <div class="skill-item">
+
+
+                            <div class="skill-name">
+
+                                <span class="skill-dot"></span>
+
+                                <span>
+                                    {{ skill.name }}
+                                </span>
+
+                            </div>
+
+
+                            {% if is_own_profile %}
+
+                                <a
+                                    href="{% url 'assessment' skill.id %}"
+                                    class="assessment-link"
+                                >
+                                    Take Assessment
+                                </a>
+
+
+                                <form method="post">
+
+                                    {% csrf_token %}
+
+
+                                    <input
+                                        type="hidden"
+                                        name="skill"
+                                        value="{{ skill.id }}"
+                                    >
+
+
+                                    <button
+                                        type="submit"
+                                        name="action"
+                                        value="remove_teach"
+                                        class="remove-btn"
+                                    >
+                                        Remove
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% empty %}
+
+                        <p class="empty">
+                            No teaching skills added yet.
+                        </p>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+                <!-- =========================
+                     Learning Skills
+                ========================= -->
+
+                <div class="skill-section">
+
+                    <h3>
+                        Skills I Want to Learn
+                    </h3>
+
+                    <p class="skill-label">
+                        Skills this user is interested in learning
+                    </p>
+
+
+                    {% for skill in profile.skills_to_learn.all %}
+
+                        <div class="skill-item">
+
+
+                            <div class="skill-name">
+
+                                <span class="skill-dot"></span>
+
+                                <span>
+                                    {{ skill.name }}
+                                </span>
+
+                            </div>
+
+
+                            {% if is_own_profile %}
+
+                                <form method="post">
+
+                                    {% csrf_token %}
+
+
+                                    <input
+                                        type="hidden"
+                                        name="skill"
+                                        value="{{ skill.id }}"
+                                    >
+
+
+                                    <button
+                                        type="submit"
+                                        name="action"
+                                        value="remove_learn"
+                                        class="remove-btn"
+                                    >
+                                        Remove
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% empty %}
+
+                        <p class="empty">
+                            No learning skills added yet.
+                        </p>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             Skill Assessment
+        ========================= -->
+
+        <section class="card">
+
+
+            <div class="assessment-intro">
+
+                <div>
+
+                    <h2>
+                        Skill Assessment
+                    </h2>
+
+                    <p class="card-description">
+                        Verified results from completed skill assessments.
+                    </p>
+
+                </div>
+
+
+                {% if assessments %}
+
+                    <span class="verified-badge">
+                        ✓ Verified
+                    </span>
+
+                {% endif %}
+
+
+            </div>
+
+
+            {% for assessment in assessments %}
+
+                <div class="assessment-grid">
+
+
+                    <div class="assessment-box">
+
+                        <span>
+                            Skill
+                        </span>
+
+                        <strong>
+                            {{ assessment.skill.name }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="assessment-box">
+
+                        <span>
+                            Score
+                        </span>
+
+                        <strong>
+                            {{ assessment.score }}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="assessment-box">
+
+                        <span>
+                            Level
+                        </span>
+
+                        <strong>
+                            {{ assessment.level }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            {% empty %}
+
+                <p class="empty">
+                    No assessments completed yet.
+                </p>
+
+            {% endfor %}
+
+
+        </section>
+
+
+        <!-- =========================
+             Review Invitation
+        ========================= -->
+
+        {% if can_review %}
+
+            <section class="card">
+
+                <div class="review-invite">
+
+                    <h3>
+                        Share Your Experience
+                    </h3>
+
+                    <p>
+
+                        You've completed a skill exchange with
+                        {{ profile.user.username }}.
+
+                        Share your experience by leaving a rating and review.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'review_user' profile.user.id %}"
+                        class="review-link"
+                    >
+                        Leave a Review
+                    </a>
+
+                </div>
+
+            </section>
+
+        {% endif %}
+
+
+        <!-- =========================
+             Reviews
+        ========================= -->
+
+        <section class="card">
+
+
+            <h2>
+                Reviews
+            </h2>
+
+            <p class="card-description">
+                Feedback shared by people who have exchanged skills with this member.
+            </p>
+
+
+            {% if reviews %}
+
+
+                {% for review in reviews %}
+
+                    <div class="review-card">
+
+
+                        <div class="review-top">
+
+                            <span class="reviewer">
+                                {{ review.reviewer.username }}
+                            </span>
+
+
+                            <span class="rating">
+                                {{ review.rating }} ⭐
+                            </span>
+
+                        </div>
+
+
+                        {% if review.comment %}
+
+                            <p class="review-comment">
+                                {{ review.comment }}
+                            </p>
+
+                        {% endif %}
+
+
+                        <span class="review-date">
+                            {{ review.created_at }}
+                        </span>
+
+
+                    </div>
+
+                {% endfor %}
+
+
+            {% else %}
+
+                <p class="empty">
+                    No reviews yet.
+                </p>
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
 
 </body>
+
 </html>

@@ -1,23 +1,583 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Dashboard - Skill Exchange Platform</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Skill Exchange Platform</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+        }
+
+
+        /* =========================
+           Navigation
+        ========================= */
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffdf8;
+            border-bottom: 1px solid #e5e0d5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #496b58;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4d5d54;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #496b58;
+        }
+
+        .logout-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: #496b58;
+            color: white !important;
+        }
+
+
+        /* =========================
+           Hero Section
+        ========================= */
+
+        .hero {
+            min-height: 600px;
+            padding: 90px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #e3eadf;
+            color: #496b58;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            color: #26382f;
+        }
+
+        .hero h1 span {
+            color: #496b58;
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #68756d;
+            margin-bottom: 35px;
+            max-width: 560px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+
+        /* =========================
+           Hero Buttons
+        ========================= */
+
+        .primary-btn,
+        .secondary-btn {
+            text-decoration: none;
+            padding: 14px 25px;
+            border-radius: 30px;
+            font-size: 15px;
+            display: inline-block;
+        }
+
+        .primary-btn {
+            background: #496b58;
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #e3eadf;
+            color: #496b58;
+        }
+
+        .primary-btn:hover,
+        .secondary-btn:hover {
+            transform: translateY(-2px);
+        }
+
+
+        /* Find a Skill Button */
+
+        .hero-button {
+            display: inline-block;
+            padding: 14px 28px;
+            background: #496b58;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .hero-button:hover {
+            background: #26382f;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(38, 56, 47, 0.15);
+        }
+
+
+        /* =========================
+           Hero Decorative Card
+        ========================= */
+
+        .hero-card {
+            width: 360px;
+            min-height: 360px;
+            background: #fffdf8;
+            border-radius: 30px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(45, 61, 51, 0.10);
+            position: relative;
+        }
+
+        .hero-card h3 {
+            margin-bottom: 25px;
+            color: #26382f;
+        }
+
+        .skill-card {
+            padding: 18px;
+            background: #f1f4ed;
+            border-radius: 18px;
+            margin-bottom: 15px;
+        }
+
+        .skill-card strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #496b58;
+        }
+
+        .skill-card span {
+            font-size: 13px;
+            color: #758078;
+        }
+
+
+        /* =========================
+           How It Works
+        ========================= */
+
+        .section {
+            padding: 80px 7%;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 50px;
+        }
+
+        .section-heading h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .section-heading p {
+            color: #748078;
+            line-height: 1.6;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .step-card {
+            background: #fffdf8;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(45, 61, 51, 0.07);
+        }
+
+        .step-number {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #dce7da;
+            color: #496b58;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .step-card h3 {
+            margin-bottom: 12px;
+        }
+
+        .step-card p {
+            color: #748078;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           Call To Action
+        ========================= */
+
+        .cta {
+            margin: 40px 7% 80px;
+            padding: 70px 40px;
+            text-align: center;
+            background: #496b58;
+            border-radius: 30px;
+            color: white;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta a {
+            display: inline-block;
+            padding: 14px 25px;
+            background: #fffdf8;
+            color: #496b58;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           Mobile Responsive
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 60px;
+            }
+
+            .hero p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero-card {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
 </head>
+
 
 <body>
 
-    <h1>Welcome to your Dashboard, {{ user.username }}!</h1>
 
-    <p>What would you like to do?</p>
+    <!-- =========================
+         Navigation
+    ========================= -->
 
-    <button>My Profile</button>
-    <button>Skills I Can Teach</button>
-    <button>Skills I Want to Learn</button>
-    <button>Find People</button>
-    <button>My Assessments</button>
-    <button>Exchange Requests</button>
-    <button>Sessions</button>
-    <button>Reviews</button>
+    <nav class="navbar">
+
+        <div class="logo">
+            Skill Exchange
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{% url 'dashboard' %}">
+                Home
+            </a>
+
+            <a href="{% url 'find_people' %}">
+                Find People
+            </a>
+
+            <a href="{% url 'profile' %}">
+                My Profile
+            </a>
+
+            <a href="{% url 'exchange_requests' %}">
+                Requests
+            </a>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         Hero Section
+    ========================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-tag">
+                Learn • Teach • Exchange
+            </div>
+
+            <h1>
+                Learn something new.
+                <span>Share what you know.</span>
+            </h1>
+
+            <p>
+                Skill Exchange Platform connects people who want
+                to learn with people who already have the skills
+                they need — creating meaningful peer-to-peer
+                learning experiences.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{% url 'find_people' %}" class="hero-button">
+                    Find a Skill
+                </a>
+
+                <a href="{% url 'profile' %}" class="secondary-btn">
+                    View My Profile
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Decorative Card -->
+
+        <div class="hero-card">
+
+            <h3>
+                Discover Your Next Skill
+            </h3>
+
+            <div class="skill-card">
+
+                <strong>
+                    Python
+                </strong>
+
+                <span>
+                    Learn from experienced learners
+                </span>
+
+            </div>
+
+            <div class="skill-card">
+
+                <strong>
+                    Web Development
+                </strong>
+
+                <span>
+                    Exchange knowledge with peers
+                </span>
+
+            </div>
+
+            <div class="skill-card">
+
+                <strong>
+                    UI / UX Design
+                </strong>
+
+                <span>
+                    Grow your skills together
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         How It Works
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <h2>
+                How Skill Exchange Works
+            </h2>
+
+            <p>
+                Learning doesn't always have to come with a price tag.
+                Share your knowledge and discover what others can teach you.
+            </p>
+
+        </div>
+
+
+        <div class="steps">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Discover
+                </h3>
+
+                <p>
+                    Search for people who can teach the skills
+                    you want to learn.
+                </p>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    Match
+                </h3>
+
+                <p>
+                    Find compatible learners based on the
+                    skills you can teach and want to learn.
+                </p>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Exchange
+                </h3>
+
+                <p>
+                    Connect, chat and exchange knowledge
+                    through peer-to-peer learning.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         Call To Action
+    ========================= -->
+
+    <section class="cta">
+
+        <h2>
+            Ready to exchange your skills?
+        </h2>
+
+        <p>
+            Find someone who knows what you want to learn.
+        </p>
+
+        <a href="{% url 'find_people' %}" class="hero-button">
+            Start Exploring
+        </a>
+
+    </section>
+
 
 </body>
+
 </html>

@@ -1,38 +1,415 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Register - Skill Exchange Platform</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account - Skill Exchange</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffdf8;
+            border-bottom: 1px solid #e5e0d5;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #496b58;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #4d5d54;
+            font-size: 14px;
+        }
+
+        .nav-link:hover {
+            color: #496b58;
+        }
+
+        /* Main */
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            margin: 55px auto 80px;
+        }
+
+        /* Register Card */
+
+        .register-card {
+            background: #fffdf8;
+            padding: 42px;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(45, 61, 51, 0.08);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #e3eadf;
+            color: #496b58;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .register-header h1 {
+            font-size: 31px;
+            margin-bottom: 9px;
+        }
+
+        .register-header p {
+            color: #748078;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Form */
+
+        .form-group {
+            margin-bottom: 21px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4d5d54;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d9dfd8;
+            border-radius: 14px;
+            background: #faf9f4;
+            color: #26382f;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #496b58;
+            background: white;
+        }
+
+        .form-group input::placeholder {
+            color: #a0a7a2;
+        }
+
+        /* Django Help Text */
+
+        .help-text {
+            margin-top: 7px;
+            color: #8a938d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .help-text ul {
+            padding-left: 18px;
+        }
+
+        .help-text li {
+            margin-bottom: 3px;
+        }
+
+        /* Errors */
+
+        .error-box {
+            background: #f4e8e4;
+            color: #8a5a4d;
+            padding: 13px 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .field-error {
+            margin-top: 7px;
+            color: #9a6254;
+            font-size: 12px;
+        }
+
+        /* Register Button */
+
+        .register-btn {
+            width: 100%;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            background: #496b58;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 7px;
+            transition: 0.2s ease;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Login */
+
+        .login-text {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #748078;
+        }
+
+        .login-text a {
+            color: #496b58;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 18px 6%;
+            }
+
+            .container {
+                width: 92%;
+                margin-top: 35px;
+            }
+
+            .register-card {
+                padding: 30px 22px;
+            }
+
+            .register-header h1 {
+                font-size: 28px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-    <h1>Create Your Account</h1>
 
-    <form method="post">
-        {% csrf_token %}
+    <!-- Navigation -->
 
-        {{ form.non_field_errors }}
+    <nav class="navbar">
 
-        <p>
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {{ form.username.errors }}
-        </p>
+        <a href="{% url 'dashboard' %}" class="logo">
+            Skill Exchange
+        </a>
 
-        <p>
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            {{ form.password1.errors }}
-        </p>
+        <a href="{% url 'login' %}" class="nav-link">
+            Already have an account?
+        </a>
 
-        <p>
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
-            {{ form.password2.errors }}
-        </p>
+    </nav>
 
-        <button type="submit">Register</button>
-    </form>
+
+    <!-- Registration -->
+
+    <main class="container">
+
+        <div class="register-card">
+
+
+            <!-- Header -->
+
+            <div class="register-header">
+
+                <div class="register-icon">
+                    🌿
+                </div>
+
+                <h1>
+                    Create Your Account
+                </h1>
+
+                <p>
+                    Join the community and start exchanging skills.
+                </p>
+
+            </div>
+
+
+            <!-- Form -->
+
+            {% if form.non_field_errors %}
+
+                <div class="error-box">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <form method="post">
+
+                {% csrf_token %}
+
+
+                <!-- Username -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.username.id_for_label }}">
+                        Username
+                    </label>
+
+                    {{ form.username }}
+
+                    {% if form.username.help_text %}
+
+                        <div class="help-text">
+                            {{ form.username.help_text|safe }}
+                        </div>
+
+                    {% endif %}
+
+                    {% for error in form.username.errors %}
+
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.password1.id_for_label }}">
+                        Password
+                    </label>
+
+                    {{ form.password1 }}
+
+                    {% if form.password1.help_text %}
+
+                        <div class="help-text">
+                            {{ form.password1.help_text|safe }}
+                        </div>
+
+                    {% endif %}
+
+                    {% for error in form.password1.errors %}
+
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Confirm Password -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.password2.id_for_label }}">
+                        Confirm Password
+                    </label>
+
+                    {{ form.password2 }}
+
+                    {% if form.password2.help_text %}
+
+                        <div class="help-text">
+                            {{ form.password2.help_text|safe }}
+                        </div>
+
+                    {% endif %}
+
+                    {% for error in form.password2.errors %}
+
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="register-btn"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <!-- Login -->
+
+            <p class="login-text">
+
+                Already have an account?
+
+                <a href="{% url 'login' %}">
+                    Log in
+                </a>
+
+            </p>
+
+
+        </div>
+
+    </main>
+
 
 </body>
+
 </html>

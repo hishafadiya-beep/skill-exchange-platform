@@ -1,25 +1,311 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login - Skill Exchange Platform</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Skill Exchange</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            width: 100%;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffdf8;
+            border-bottom: 1px solid #e8e3d8;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #26382f;
+            text-decoration: none;
+        }
+
+        .logo span {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: #748078;
+            margin-top: 3px;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #496b58;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-link:hover {
+            color: #26382f;
+        }
+
+        /* PAGE */
+
+        .page {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            background: #fffdf8;
+            padding: 45px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(38, 56, 47, 0.08);
+            border: 1px solid #ebe7dc;
+        }
+
+        .login-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #e3eadf;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            font-size: 30px;
+            margin-bottom: 9px;
+            color: #26382f;
+        }
+
+        .login-header p {
+            color: #748078;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #26382f;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #d8ddd5;
+            border-radius: 12px;
+            background: #f8f7f2;
+            color: #26382f;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #496b58;
+            background: #fffdf8;
+            box-shadow: 0 0 0 3px rgba(73, 107, 88, 0.10);
+        }
+
+        .error-box {
+            background: #f7e9e6;
+            color: #8b5148;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .login-button {
+            width: 100%;
+            border: none;
+            background: #496b58;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+            background: #26382f;
+            transform: translateY(-1px);
+        }
+
+        .register-text {
+            text-align: center;
+            margin-top: 25px;
+            color: #748078;
+            font-size: 14px;
+        }
+
+        .register-text a {
+            color: #496b58;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 18px 5%;
+            }
+
+            .login-card {
+                padding: 30px 22px;
+            }
+
+            .login-header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>Login</h1>
+    <nav class="navbar">
 
-    <form method="POST">
-        {% csrf_token %}
+        <a href="{% url 'login' %}" class="logo">
+            Skill Exchange
+            <span>Learn • Teach • Exchange</span>
+        </a>
 
-        <label>Username:</label>
-        <input type="text" name="username" required>
-        <br><br>
+        <a href="{% url 'register' %}" class="nav-link">
+            Create Account
+        </a>
 
-        <label>Password:</label>
-        <input type="password" name="password" required>
-        <br><br>
+    </nav>
 
-        <button type="submit">Login</button>
-    </form>
+
+    <main class="page">
+
+        <div class="login-card">
+
+            <div class="login-icon">
+                🔐
+            </div>
+
+            <div class="login-header">
+
+                <h1>Welcome Back</h1>
+
+                <p>
+                    Log in to continue your skill exchange journey.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+                <div class="error-box">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit" class="login-button">
+                    Log In
+                </button>
+
+            </form>
+
+
+            <div class="register-text">
+
+                Don't have an account?
+
+                <a href="{% url 'register' %}">
+                    Create Account
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
 
 </body>
 </html>
