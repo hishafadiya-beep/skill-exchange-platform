@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Already Completed</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f4ed;
+            color: #26382f;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 520px;
+            width: 100%;
+            background: #fffdf8;
+            padding: 45px 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(45, 61, 51, 0.09);
+        }
+
+        .icon {
+            font-size: 45px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 15px;
+            color: #496b58;
+        }
+
+        p {
+            color: #68756d;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            background: #eaf2e6;
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .score strong {
+            display: block;
+            font-size: 30px;
+            color: #496b58;
+            margin-bottom: 5px;
+        }
+
+        .score span {
+            font-size: 14px;
+            color: #68756d;
+        }
+
+        a {
+            display: inline-block;
+            background: #496b58;
+            color: white;
+            text-decoration: none;
+            padding: 13px 24px;
+            border-radius: 25px;
+            margin: 5px;
+        }
+
+        a:hover {
+            background: #344b3d;
+        }
+
+        .secondary {
+            background: transparent;
+            color: #496b58;
+            border: 1px solid #496b58;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="icon">✓</div>
+
+        <h1>Assessment Already Completed</h1>
+
+        <p>
+            You have already completed the {{ skill.name }} assessment.
+            Each subject can be assessed only once. Your previous result
+            is saved, so you cannot submit another attempt.
+        </p>
+
+        <div class="score">
+            <strong>{{ assessment.score }}%</strong>
+            <span>Your previous skill level: {{ assessment.level }}</span>
+        </div>
+
+        <a href="{% url 'profile' %}">Go to My Profile</a>
+
+        <a href="{% url 'dashboard' %}" class="secondary">
+            Dashboard
+        </a>
+    </div>
+</body>
+</html>

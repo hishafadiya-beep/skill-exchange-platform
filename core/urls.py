@@ -10,7 +10,10 @@ from .views import (
     send_exchange_request,
     exchange_requests,
     chat,
-    review_user
+    review_user,
+    learning_queries,
+    post_learning_query,
+    mark_query_solved,
 )
 
 urlpatterns = [
@@ -51,4 +54,11 @@ urlpatterns = [
         review_user,
         name='review_user'
     ),
+        path('learning-queries/', learning_queries, name='learning_queries'),
+        path('post-query/', post_learning_query, name='post_learning_query'),
+        path(
+            'learning-queries/<int:query_id>/solved/',
+            mark_query_solved,
+            name='mark_query_solved'
+),
 ]

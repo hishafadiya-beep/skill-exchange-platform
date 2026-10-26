@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Query | Skill Exchange</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f2;
+            margin: 0;
+            padding: 30px 16px;
+            color: #26382c;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #365a43;
+            margin-top: 0;
+        }
+
+        p {
+            color: #657268;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccd6cc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 24px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #496b58;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #365a43;
+        }
+
+        .message {
+            padding: 12px;
+            background: #fff1e8;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+            color: #365a43;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Ask a Question</h1>
+
+        <p>
+            Stuck on something? Share your doubt with the community
+            and find someone who can help you.
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="subject">Subject</label>
+            <input
+                type="text"
+                id="subject"
+                name="subject"
+                maxlength="100"
+                placeholder="e.g. Python"
+                required
+            >
+
+            <label for="topic">Topic</label>
+            <input
+                type="text"
+                id="topic"
+                name="topic"
+                maxlength="200"
+                placeholder="e.g. Recursion"
+                required
+            >
+
+            <label for="description">Describe your doubt</label>
+            <textarea
+                id="description"
+                name="description"
+                placeholder="Explain what you're struggling with..."
+                required
+            ></textarea>
+
+            <label for="attempted_solution">
+                What have you tried so far? (Optional)
+            </label>
+            <textarea
+                id="attempted_solution"
+                name="attempted_solution"
+                placeholder="Share what you tried and where you got stuck..."
+            ></textarea>
+
+            <button type="submit">Post My Query</button>
+        </form>
+
+        <a class="back-link" href="{% url 'learning_queries' %}">
+            View All Queries
+        </a>
+    </div>
+</body>
+</html>

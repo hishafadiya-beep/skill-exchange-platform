@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Queries | Skill Exchange</title>
+
+    
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f2;
+            margin: 0;
+            padding: 30px 16px;
+            color: #26382c;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+        }
+
+        /* Page Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: #365a43;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #657268;
+        }
+
+        /* General Buttons */
+        .button {
+            display: inline-block;
+            background: #496b58;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .button:hover {
+            background: #365443;
+        }
+
+        /* Question Cards */
+        .query-card {
+            background: white;
+            padding: 24px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .query-card h2 {
+            color: #365a43;
+            margin-top: 0;
+        }
+
+        .meta {
+            color: #778279;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .topic {
+            display: inline-block;
+            background: #e7efe5;
+            color: #365a43;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .description {
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .attempted {
+            background: #f6f8f5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        /* Empty State */
+        .empty {
+            background: white;
+            padding: 35px;
+            text-align: center;
+            border-radius: 12px;
+            color: #657268;
+        }
+
+        /* Original Answer Button */
+        .answer-btn {
+            background: #496b58;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.25s ease,
+                        transform 0.25s ease,
+                        box-shadow 0.25s ease;
+            margin-top: 12px;
+        }
+
+        .answer-btn:hover {
+            background: #26382f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(38, 56, 47, 0.15);
+        }
+
+        .answer-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Answer Form Card */
+        .answer-form-card {
+            background: #fffdf8;
+            padding: 28px;
+            border: 1px solid #e8e8dc;
+            border-radius: 22px;
+            box-shadow: 0 8px 24px rgba(45, 61, 51, 0.06);
+            margin-top: 24px;
+        }
+
+        /* Answer Form Heading */
+        .answer-heading {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 26px;
+        }
+
+        .answer-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e7efe4;
+            border-radius: 15px;
+            font-size: 23px;
+        }
+
+        .answer-heading h3 {
+            margin: 0 0 6px;
+            color: #2d3d33;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .answer-heading p {
+            margin: 0;
+            color: #788078;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Answer Textarea */
+        .answer-form-card label {
+            display: block;
+            margin-bottom: 10px;
+            color: #35483a;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .answer-form-card textarea {
+            display: block;
+            width: 100%;
+            min-height: 150px;
+            padding: 16px;
+            box-sizing: border-box;
+            border: 1px solid #dfe4d8;
+            border-radius: 14px;
+            background: #ffffff;
+            color: #2d3d33;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.7;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s ease,
+                        box-shadow 0.2s ease;
+        }
+
+        .answer-form-card textarea:focus {
+            border-color: #718c72;
+            box-shadow: 0 0 0 3px rgba(113, 140, 114, 0.13);
+        }
+
+        .answer-form-card textarea::placeholder {
+            color: #a0a79e;
+        }
+
+        /* Answer Form Footer */
+        .answer-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .answer-hint {
+            color: #788078;
+            font-size: 12px;
+        }
+
+        /* Post Answer Button */
+        .post-answer-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            border-radius: 12px;
+            padding: 13px 22px;
+            background: #354f3b;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease,
+                        transform 0.2s ease,
+                        box-shadow 0.2s ease;
+        }
+
+        .post-answer-btn:hover {
+            background: #263d2d;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(38, 56, 47, 0.12);
+        }
+
+        .post-answer-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Mobile Responsive Styling */
+        @media (max-width: 600px) {
+            .query-card {
+                padding: 18px;
+            }
+
+            .answer-form-card {
+                padding: 20px;
+            }
+
+            .answer-heading h3 {
+                font-size: 18px;
+            }
+
+            .answer-footer {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .post-answer-btn {
+                width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <div>
+                <h1>Community Questions</h1>
+                <p class="subtitle">
+                    Share what you know. Help someone learn.
+                </p>
+            </div>
+
+            <a class="button" href="{% url 'post_learning_query' %}">
+                + Post a Query
+            </a>
+        </div>
+
+        {% if queries %}
+            {% for query in queries %}
+                <div class="query-card">
+                    <h2>{{ query.subject }}</h2>
+
+                    <span class="topic">{{ query.topic }}</span>
+
+                    <p class="meta">
+                        Asked by {{ query.author.username }}
+                        · {{ query.created_at|date:"d M Y, h:i A" }}
+                    </p>
+
+                    <div class="description">{{ query.description }}</div>
+
+                    
+<h3>Answers</h3>
+
+{% for answer in query.answers.all %}
+    <div class="attempted">
+        <strong>{{ answer.author.username }}</strong>
+        <p>{{ answer.answer_text }}</p>
+        <small>{{ answer.created_at|date:"d M Y, h:i A" }}</small>
+    </div>
+{% empty %}
+    <p>No answers yet. Be the first to help!</p>
+{% endfor %}
+
+
+{% if query.author == request.user and query.status == 'Open' and query.answers.exists %}
+    <form method="POST" action="{% url 'mark_query_solved' query.id %}">
+        {% csrf_token %}
+            <button type="submit" class="answer-btn">Post Answer</button>    </form>
+{% endif %}
+
+
+{% if query.author != request.user %}
+    
+{% if query.author != request.user %}
+    <div class="answer-form-card">
+
+        <div class="answer-heading">
+            <div class="answer-icon">✍️</div>
+            <div>
+                <h3>Share your knowledge</h3>
+                <p>Help a fellow learner understand the solution.</p>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="query_id" value="{{ query.id }}">
+
+            <label for="answer-{{ query.id }}">Your answer</label>
+
+            <textarea
+                id="answer-{{ query.id }}"
+                name="answer_text"
+                placeholder="Explain your solution, share an example, or guide them step by step..."
+                required
+            ></textarea>
+
+            <div class="answer-footer">
+                <span class="answer-hint">
+                    💚 Be kind, clear, and helpful.
+                </span>
+
+                <button type="submit" class="post-answer-btn">
+                    Post Answer <span>→</span>
+                </button>
+            </div>
+        </form>
+
+    </div>
+{% endif %}
+
+{% endif %}
+
+
+                    {% if query.attempted_solution %}
+                        <div class="attempted">
+                            <strong>What I've tried:</strong>
+                            <p>{{ query.attempted_solution }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty">
+                <h2>No open questions yet!</h2>
+                <p>Be the first to post a question and get the conversation started.</p>
+                <a class="button" href="{% url 'post_learning_query' %}">
+                    Ask Your First Question
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>

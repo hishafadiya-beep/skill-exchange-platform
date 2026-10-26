@@ -116,13 +116,16 @@
             gap: 22px;
         }
 
+        
         .request-card {
             background: #fffdf8;
             padding: 28px;
+            margin-bottom: 20px;
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(45, 61, 51, 0.07);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
 
         .request-card:hover {
             transform: translateY(-3px);
@@ -378,159 +381,79 @@
 
             <div class="request-grid">
 
-                {% for exchange_request in received_requests %}
+                
+            {% for exchange_request in received_requests %}
 
-                    <div class="request-card">
+                <div class="request-card">
 
-
-                        <div class="user-header">
-
-                            <div class="avatar">
-                                {{ exchange_request.sender.username|first|upper }}
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    {{ exchange_request.sender.username }}
-                                </h3>
-
-                                <p>
-                                    Wants to learn with you
-                                </p>
-
-                            </div>
-
+                    <div class="user-header">
+                        <div class="avatar">
+                            {{ exchange_request.sender.username|first|upper }}
                         </div>
-
-
-                        <div class="skill-box">
-
-                            <span>
-                                SKILL EXCHANGE
-                            </span>
-
-                            <strong>
-                                {{ exchange_request.skill.name }}
-                            </strong>
-
+                        <div>
+                            <h3>{{ exchange_request.sender.username }}</h3>
+                            <p>Wants to learn with you</p>
                         </div>
+                    </div>
 
+                    <div class="skill-box">
+                        <span>SKILL EXCHANGE</span>
+                        <strong>{{ exchange_request.skill.name }}</strong>
+                    </div>
 
-                        <div class="status-row">
-
-                            <span class="status-label">
-                                Request Status
-                            </span>
-
-                            {% if exchange_request.status == "Pending" %}
-
-                                <span class="status status-pending">
-                                    Pending
-                                </span>
-
-                            {% elif exchange_request.status == "Accepted" %}
-
-                                <span class="status status-accepted">
-                                    Accepted
-                                </span>
-
-                            {% else %}
-
-                                <span class="status status-rejected">
-                                    Rejected
-                                </span>
-
-                            {% endif %}
-
-                        </div>
-
+                    <div class="status-row">
+                        <span class="status-label">Request Status</span>
 
                         {% if exchange_request.status == "Pending" %}
-
-                            <div class="actions">
-
-                                <form method="post">
-
-                                    {% csrf_token %}
-
-                                    <input
-                                        type="hidden"
-                                        name="request_id"
-                                        value="{{ exchange_request.id }}"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        name="action"
-                                        value="accept"
-                                        class="accept-btn"
-                                    >
-                                        Accept Request
-                                    </button>
-
-                                </form>
-
-
-                                <form method="post">
-
-                                    {% csrf_token %}
-
-                                    <input
-                                        type="hidden"
-                                        name="request_id"
-                                        value="{{ exchange_request.id }}"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        name="action"
-                                        value="reject"
-                                        class="reject-btn"
-                                    >
-                                        Reject
-                                    </button>
-
-                                </form>
-
-                            </div>
-
+                            <span class="status status-pending">Pending</span>
+                        {% elif exchange_request.status == "Accepted" %}
+                            <span class="status status-accepted">Accepted</span>
+                        {% else %}
+                            <span class="status status-rejected">Rejected</span>
                         {% endif %}
-
-
-                        {% if exchange_request.status == "Accepted" %}
-
-                            <div class="actions">
-
-                                <a
-                                    href="{% url 'chat' exchange_request.sender.id %}"
-                                    class="chat-btn"
-                                >
-                                    Chat with {{ exchange_request.sender.username }}
-                                </a>
-
-                            </div>
-
-                        {% endif %}
-
-
                     </div>
 
-                {% empty %}
+                    {% if exchange_request.status == "Pending" %}
+                        <div class="actions">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="request_id" value="{{ exchange_request.id }}">
+                                <button type="submit" name="action" value="accept" class="accept-btn">
+                                    Accept Request
+                                </button>
+                            </form>
 
-                    <div class="empty-card">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="request_id" value="{{ exchange_request.id }}">
+                                <button type="submit" name="action" value="reject" class="reject-btn">
+                                    Reject
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
 
-                        <h3>
-                            No received requests
-                        </h3>
+                    {% if exchange_request.status == "Accepted" %}
+                        <div class="actions">
+                            <a href="{% url 'chat' exchange_request.sender.id %}" class="chat-btn">
+                                Chat with {{ exchange_request.sender.username }}
+                            </a>
 
-                        <p>
-                            New skill exchange requests will appear here.
-                        </p>
+                            <a href="{% url 'review_user' exchange_request.sender.id %}" class="chat-btn">
+                                Leave a Review
+                            </a>
+                        </div>
+                    {% endif %}
 
-                    </div>
+                </div>
 
-                {% endfor %}
+            {% empty %}
+                <div class="empty-card">
+                    <h3>No received requests</h3>
+                    <p>New skill exchange requests will appear here.</p>
+                </div>
+            {% endfor %}
+
 
             </div>
 
@@ -556,107 +479,59 @@
 
             <div class="request-grid">
 
-                {% for exchange_request in sent_requests %}
+                
+            {% for exchange_request in sent_requests %}
 
-                    <div class="request-card">
+                <div class="request-card">
 
-
-                        <div class="user-header">
-
-                            <div class="avatar">
-                                {{ exchange_request.receiver.username|first|upper }}
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    {{ exchange_request.receiver.username }}
-                                </h3>
-
-                                <p>
-                                    Your exchange request
-                                </p>
-
-                            </div>
-
+                    <div class="user-header">
+                        <div class="avatar">
+                            {{ exchange_request.receiver.username|first|upper }}
                         </div>
-
-
-                        <div class="skill-box">
-
-                            <span>
-                                SKILL REQUESTED
-                            </span>
-
-                            <strong>
-                                {{ exchange_request.skill.name }}
-                            </strong>
-
+                        <div>
+                            <h3>{{ exchange_request.receiver.username }}</h3>
+                            <p>Your exchange request</p>
                         </div>
+                    </div>
 
+                    <div class="skill-box">
+                        <span>SKILL REQUESTED</span>
+                        <strong>{{ exchange_request.skill.name }}</strong>
+                    </div>
 
-                        <div class="status-row">
+                    <div class="status-row">
+                        <span class="status-label">Request Status</span>
 
-                            <span class="status-label">
-                                Request Status
-                            </span>
-
-                            {% if exchange_request.status == "Pending" %}
-
-                                <span class="status status-pending">
-                                    Pending
-                                </span>
-
-                            {% elif exchange_request.status == "Accepted" %}
-
-                                <span class="status status-accepted">
-                                    Accepted
-                                </span>
-
-                            {% else %}
-
-                                <span class="status status-rejected">
-                                    Rejected
-                                </span>
-
-                            {% endif %}
-
-                        </div>
-
-
-                        {% if exchange_request.status == "Accepted" %}
-
-                            <div class="actions">
-
-                                <a
-                                    href="{% url 'chat' exchange_request.receiver.id %}"
-                                    class="chat-btn"
-                                >
-                                    Chat with {{ exchange_request.receiver.username }}
-                                </a>
-
-                            </div>
-
+                        {% if exchange_request.status == "Pending" %}
+                            <span class="status status-pending">Pending</span>
+                        {% elif exchange_request.status == "Accepted" %}
+                            <span class="status status-accepted">Accepted</span>
+                        {% else %}
+                            <span class="status status-rejected">Rejected</span>
                         {% endif %}
-
-
                     </div>
 
-                {% empty %}
+                    {% if exchange_request.status == "Accepted" %}
+                        <div class="actions">
+                            <a href="{% url 'chat' exchange_request.receiver.id %}" class="chat-btn">
+                                Chat with {{ exchange_request.receiver.username }}
+                            </a>
 
-                    <div class="empty-card">
+                            <a href="{% url 'review_user' exchange_request.receiver.id %}" class="chat-btn">
+                                Leave a Review
+                            </a>
+                        </div>
+                    {% endif %}
 
-                        <h3>
-                            No sent requests
-                        </h3>
+                </div>
 
-                        <p>
-                            Requests you send to other learners will appear here.
-                        </p>
+            {% empty %}
+                <div class="empty-card">
+                    <h3>No sent requests</h3>
+                    <p>Requests you send to other learners will appear here.</p>
+                </div>
+            {% endfor %}
 
-                    </div>
-
-                {% endfor %}
 
             </div>
 

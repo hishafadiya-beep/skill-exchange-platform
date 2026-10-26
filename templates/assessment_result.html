@@ -1,15 +1,14 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Assessment Result - Skill Exchange</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -68,19 +67,17 @@
 
         .container {
             width: 90%;
-            max-width: 700px;
-            margin: 70px auto;
+            max-width: 760px;
+            margin: 60px auto;
         }
 
         .result-card {
             background: #fffdf8;
-            padding: 55px 45px;
+            padding: 45px;
             border-radius: 30px;
             text-align: center;
             box-shadow: 0 20px 50px rgba(45, 61, 51, 0.09);
         }
-
-        /* Badge */
 
         .success-badge {
             display: inline-block;
@@ -95,7 +92,7 @@
         }
 
         .result-card h1 {
-            font-size: 36px;
+            font-size: 34px;
             margin-bottom: 12px;
         }
 
@@ -153,15 +150,136 @@
             color: #496b58;
         }
 
-        /* Message */
-
         .result-message {
             color: #68756d;
             line-height: 1.7;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
-        /* Button */
+        /* Skill Gap Analyzer */
+
+        .analysis-section {
+            margin-top: 35px;
+            padding-top: 30px;
+            border-top: 1px solid #e5e0d5;
+            text-align: left;
+        }
+
+        .analysis-section h2 {
+            font-size: 23px;
+            margin-bottom: 10px;
+            color: #344b3d;
+        }
+
+        .analysis-description {
+            color: #7b857e;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .topic-card {
+            background: #faf9f4;
+            border: 1px solid #e8e6dc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .topic-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .topic-heading h3 {
+            font-size: 16px;
+            color: #344b3d;
+            overflow-wrap: anywhere;
+        }
+
+        .topic-score {
+            font-size: 15px;
+            font-weight: bold;
+            color: #496b58;
+            white-space: nowrap;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 9px;
+            background: #e7e9e1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #78947b;
+            border-radius: 10px;
+        }
+
+        .topic-details {
+            font-size: 13px;
+            color: #7b857e;
+        }
+
+        /* Improvement suggestions */
+
+        .improvement-box {
+            background: #fff4e3;
+            border: 1px solid #f0dfc4;
+            padding: 22px;
+            border-radius: 18px;
+            margin-top: 25px;
+        }
+
+        .improvement-box h3 {
+            color: #815d30;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .improvement-box p {
+            color: #78664f;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .weak-topic-list {
+            padding-left: 22px;
+            color: #715b40;
+            line-height: 1.9;
+        }
+
+        .success-box {
+            background: #eaf2e6;
+            border: 1px solid #d8e6d2;
+            padding: 22px;
+            border-radius: 18px;
+            margin-top: 25px;
+        }
+
+        .success-box h3 {
+            color: #496b58;
+            margin-bottom: 8px;
+        }
+
+        .success-box p {
+            color: #647568;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* Buttons */
+
+        .actions {
+            margin-top: 35px;
+        }
 
         .profile-btn {
             display: inline-block;
@@ -194,174 +312,232 @@
         /* Mobile */
 
         @media (max-width: 850px) {
-
             .nav-links {
                 display: none;
             }
 
             .container {
                 width: 92%;
-                margin: 45px auto;
+                margin: 35px auto;
             }
 
             .result-card {
-                padding: 40px 25px;
+                padding: 30px 22px;
             }
 
             .result-card h1 {
-                font-size: 30px;
+                font-size: 28px;
             }
 
+            .analysis-section h2 {
+                font-size: 21px;
+            }
+
+            .topic-card {
+                padding: 16px;
+            }
         }
-
     </style>
-
 </head>
 
 <body>
 
-
     <!-- Navigation -->
 
     <nav class="navbar">
-
         <a href="{% url 'dashboard' %}" class="logo">
             Skill Exchange
         </a>
 
         <div class="nav-links">
-
-            <a href="{% url 'dashboard' %}">
-                Home
-            </a>
-
-            <a href="{% url 'find_people' %}">
-                Find People
-            </a>
-
-            <a href="{% url 'profile' %}">
-                My Profile
-            </a>
-
-            <a href="{% url 'exchange_requests' %}">
-                Requests
-            </a>
-
-            <a href="{% url 'logout' %}" class="logout-btn">
-                Logout
-            </a>
-
+            <a href="{% url 'dashboard' %}">Home</a>
+            <a href="{% url 'find_people' %}">Find People</a>
+            <a href="{% url 'profile' %}">My Profile</a>
+            <a href="{% url 'exchange_requests' %}">Requests</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
         </div>
-
     </nav>
-
 
     <main class="container">
 
         <div class="result-card">
 
-
             <span class="success-badge">
                 ASSESSMENT COMPLETED
             </span>
 
-
-            <h1>
-                Python Assessment Result
-            </h1>
-
+            <h1>{{ skill.name }} Assessment Result</h1>
 
             <p class="subtitle">
-                Your skill verification assessment has been completed.
+                Your skill assessment is complete. Here's your performance
+                and the areas you can focus on to improve.
             </p>
 
-
-            <!-- Score -->
+            <!-- Overall Score -->
 
             <div class="score-circle">
-
-                <strong>
-                    {{ score }}%
-                </strong>
-
-                <span>
-                    SCORE
-                </span>
-
+                <strong>{{ score }}%</strong>
+                <span>OVERALL SCORE</span>
             </div>
 
-
-            <!-- Level -->
+            <!-- Verified Level -->
 
             <div class="level-box">
-
-                <span class="level-label">
-                    VERIFIED SKILL LEVEL
-                </span>
-
-                <div class="level">
-                    {{ level }}
-                </div>
-
+                <span class="level-label">ASSESSED SKILL LEVEL</span>
+                <div class="level">{{ level }}</div>
             </div>
 
-
-            <!-- Result message -->
+            <!-- Result Message -->
 
             <div class="result-message">
-
                 {% if level == "Advanced" %}
-
                     <p>
-                        Excellent! You have an advanced level
-                        of Python knowledge.
+                        Excellent work! You demonstrated strong knowledge
+                        of {{ skill.name }}. Keep practising to maintain
+                        and strengthen your skills.
                     </p>
-
                 {% elif level == "Intermediate" %}
-
                     <p>
-                        Good job! You have an intermediate level
-                        of Python knowledge.
+                        Good job! You have a solid foundation in
+                        {{ skill.name }}. Focus on your weaker topics
+                        to keep progressing.
                     </p>
-
                 {% elif level == "Basic" %}
-
                     <p>
-                        You have a basic level of Python knowledge.
+                        You've made a start with {{ skill.name }}.
+                        Practising the topics below can help you build
+                        a stronger foundation.
                     </p>
+                {% else %}
+                    <p>
+                        You're still building your {{ skill.name }}
+                        knowledge. Don't worry — use the topic analysis
+                        below to decide what to study next.
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Skill Gap Analyzer -->
+
+            <section class="analysis-section">
+
+                <h2>Your Skill Gap Analysis</h2>
+
+                <p class="analysis-description">
+                    See how you performed in each topic and identify
+                    which areas deserve more practice. Topics scoring
+                    below 50% are suggested as areas to improve.
+                </p>
+
+                {% if topic_results %}
+
+                    {% for result in topic_results %}
+
+                        <div class="topic-card">
+
+                            <div class="topic-heading">
+                                <h3>{{ result.topic }}</h3>
+
+                                <span class="topic-score">
+                                    {{ result.score }}%
+                                </span>
+                            </div>
+
+                            <div
+                                class="progress-track"
+                                role="progressbar"
+                                aria-label="{{ result.topic }} score"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="{{ result.score }}"
+                            >
+                                <div
+                                    class="progress-fill"
+                                    style="width: {{ result.score }}%;"
+                                ></div>
+                            </div>
+
+                            <p class="topic-details">
+                                {{ result.correct }} correct out of
+                                {{ result.total }} question{{ result.total|pluralize }}
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
+
+                    <!-- Weak Topics -->
+
+                    {% if weak_topics %}
+
+                        <div class="improvement-box">
+
+                            <h3>Topics to Improve</h3>
+
+                            <p>
+                                These topics scored below 50%.
+                                Spend some time reviewing their fundamentals
+                                and practising more questions.
+                            </p>
+
+                            <ul class="weak-topic-list">
+                                {% for topic in weak_topics %}
+                                    <li>{{ topic }}</li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="success-box">
+
+                            <h3>Great work!</h3>
+
+                            <p>
+                                None of your assessed topics scored below
+                                50%. Keep practising and explore more
+                                advanced questions to continue improving.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
 
                 {% else %}
 
-                    <p>
-                        Your Python skill could not be verified yet.
-                    </p>
+                    <div class="improvement-box">
+                        <h3>Topic analysis unavailable</h3>
+
+                        <p>
+                            No topic breakdown was generated for this
+                            assessment. Try again after topic information
+                            has been added to the assessment questions.
+                        </p>
+                    </div>
 
                 {% endif %}
 
-            </div>
-
+            </section>
 
             <!-- Actions -->
 
-            <a
-                href="{% url 'profile' %}"
-                class="profile-btn"
-            >
-                Go to My Profile
-            </a>
+            <div class="actions">
 
-            <a
-                href="{% url 'dashboard' %}"
-                class="secondary-link"
-            >
-                Return to Dashboard
-            </a>
+                <a href="{% url 'profile' %}" class="profile-btn">
+                    Go to My Profile
+                </a>
 
+                <a href="{% url 'dashboard' %}" class="secondary-link">
+                    Return to Dashboard
+                </a>
+
+            </div>
 
         </div>
 
     </main>
 
 </body>
-
 </html>
+```

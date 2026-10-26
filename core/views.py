@@ -5,7 +5,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Profile, Skill, Assessment, Question, SkillExchangeRequest, Message, Review
+from django.db import IntegrityError, transaction
+from django.shortcuts import get_object_or_404
+from .models import(
+    Profile, Skill, Assessment,Question, 
+    SkillExchangeRequest, Message, Review,
+    LearningHelpRequest,HelpOffer, QueryAnswer)
+from django.contrib import messages
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -34,9 +40,29 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-
+@login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    assessments = Assessment.objects.filter(
+        user=request.user
+    ).select_related('skill').order_by('skill__name')
+
+    total_assessments = assessments.count()
+
+    if total_assessments > 0:
+        average_score = round(
+            sum(a.score for a in assessments) / total_assessments,
+            2
+        )
+    else:
+        average_score = 0
+
+    context = {
+        'assessments': assessments,
+        'total_assessments': total_assessments,
+        'average_score': average_score,
+    }
+
+    return render(request, 'dashboard.html', context)
 
 @login_required
 def profile(request, user_id=None):
@@ -113,12 +139,33 @@ def logout_view(request):
     return render(request, 'logout.html')
 
 
+
 @login_required
 def assessment(request, skill_id):
-    skill = Skill.objects.get(id=skill_id)
+    skill = get_object_or_404(Skill, id=skill_id)
+
+    # Prevent a user from taking the same assessment again
+    existing_assessment = Assessment.objects.filter(
+        user=request.user,
+        skill=skill
+    ).first()
+
+    if existing_assessment:
+        return render(request, 'assessment_already_taken.html', {
+            'skill': skill,
+            'assessment': existing_assessment
+        })
+
     questions = Question.objects.filter(skill=skill)
 
     if request.method == 'POST':
+        if not questions.exists():
+            messages.error(
+                request,
+                'This assessment has no questions yet.'
+            )
+            return redirect('assessment', skill_id=skill.id)
+
         score = 0
         topic_scores = {}
 
@@ -139,11 +186,7 @@ def assessment(request, skill_id):
                 topic_scores[topic]['correct'] += 1
 
         total = questions.count()
-
-        if total > 0:
-            percentage = int((score / total) * 100)
-        else:
-            percentage = 0
+        percentage = int((score / total) * 100)
 
         if percentage >= 90:
             level = "Advanced"
@@ -158,12 +201,9 @@ def assessment(request, skill_id):
         weak_topics = []
 
         for topic, data in topic_scores.items():
-            if data['total'] > 0:
-                topic_percentage = int(
-                    (data['correct'] / data['total']) * 100
-                )
-            else:
-                topic_percentage = 0
+            topic_percentage = int(
+                (data['correct'] / data['total']) * 100
+            )
 
             topic_results.append({
                 'topic': topic,
@@ -175,12 +215,30 @@ def assessment(request, skill_id):
             if topic_percentage < 50:
                 weak_topics.append(topic)
 
-        Assessment.objects.create(
-            user=request.user,
-            skill=skill,
-            score=percentage,
-            level=level
-        )
+        # The database constraint prevents duplicate records.
+        # Handle a second submission gracefully.
+        try:
+            with transaction.atomic():
+                Assessment.objects.create(
+                    user=request.user,
+                    skill=skill,
+                    score=percentage,
+                    level=level
+                )
+        except IntegrityError:
+            existing_assessment = Assessment.objects.filter(
+                user=request.user,
+                skill=skill
+            ).first()
+
+            return render(
+                request,
+                'assessment_already_taken.html',
+                {
+                    'skill': skill,
+                    'assessment': existing_assessment
+                }
+            )
 
         return render(request, 'assessment_result.html', {
             'score': percentage,
@@ -194,7 +252,6 @@ def assessment(request, skill_id):
         'questions': questions,
         'skill': skill
     })
-
 
 @login_required
 def find_people(request):
@@ -382,3 +439,97 @@ def review_user(request, user_id):
     return render(request, 'review.html', {
         'reviewed_user': reviewed_user
     })
+
+@login_required
+def post_learning_query(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject', '').strip()
+        topic = request.POST.get('topic', '').strip()
+        description = request.POST.get('description', '').strip()
+        attempted_solution = request.POST.get(
+            'attempted_solution', ''
+        ).strip()
+
+        if not subject or not topic or not description:
+            messages.error(
+                request,
+                'Please fill in the subject, topic, and description.'
+            )
+        else:
+            LearningHelpRequest.objects.create(
+                author=request.user,
+                subject=subject,
+                topic=topic,
+                description=description,
+                attempted_solution=attempted_solution
+            )
+
+            messages.success(
+                request,
+                'Your question has been posted successfully!'
+            )
+            return redirect('learning_queries')
+
+    return render(request, 'post_learning_query.html')
+
+
+@login_required
+def learning_queries(request):
+    if request.method == 'POST':
+        query_id = request.POST.get('query_id')
+        answer_text = request.POST.get('answer_text', '').strip()
+
+        query = get_object_or_404(
+            LearningHelpRequest,
+            id=query_id,
+            status='Open'
+        )
+
+        if query.author == request.user:
+            messages.error(request, "You cannot answer your own query.")
+        elif not answer_text:
+            messages.error(request, "Please enter an answer.")
+        else:
+            QueryAnswer.objects.create(
+                help_request=query,
+                author=request.user,
+                answer_text=answer_text
+            )
+            messages.success(request, "Your answer was posted!")
+
+        return redirect('learning_queries')
+
+    queries = LearningHelpRequest.objects.filter(
+        status='Open'
+    ).select_related('author').prefetch_related(
+        'answers__author'
+    ).order_by('-created_at')
+
+    return render(
+        request,
+        'learning_queries.html',
+        {'queries': queries}
+    )
+
+@login_required
+def mark_query_solved(request, query_id):
+    if request.method != 'POST':
+        return redirect('learning_queries')
+
+    query = get_object_or_404(
+        LearningHelpRequest,
+        id=query_id,
+        author=request.user
+    )
+
+    if query.status == 'Open' and query.answers.exists():
+        query.status = 'Resolved'
+        query.save(update_fields=['status'])
+        messages.success(request, 'Your question has been marked as solved!')
+    else:
+        messages.error(
+            request,
+            'You can mark a question as solved after receiving an answer.'
+        )
+
+    return redirect('learning_queries')

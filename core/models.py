@@ -30,6 +30,7 @@ class Skill(models.Model):
         return self.name
 
 
+
 class Assessment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
@@ -38,6 +39,14 @@ class Assessment(models.Model):
     level = models.CharField(max_length=20)
 
     completed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'skill'],
+                name='unique_assessment_per_user_skill'
+            )
+        ]
 
     def __str__(self):
         return f"{self.user.username} - {self.skill.name} - {self.score}"
@@ -212,3 +221,24 @@ class HelpOffer(models.Model):
 
     def __str__(self):
         return f"{self.helper.username} offers help: {self.help_request.topic}"
+
+
+class QueryAnswer(models.Model):
+    help_request = models.ForeignKey(
+        LearningHelpRequest,
+        on_delete=models.CASCADE,
+        related_name='answers'
+    )
+
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='query_answers'
+    )
+
+    answer_text = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Answer by {self.author.username} to {self.help_request.topic}"
